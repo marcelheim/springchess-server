@@ -1,6 +1,7 @@
 package m.heim.server.controller;
 
 import m.heim.server.domain.User;
+import m.heim.server.service.GameService;
 import m.heim.server.service.UserService;
 import m.heim.server.service.Web3Service;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,18 +15,37 @@ import org.springframework.web.bind.annotation.RestController;
 import java.security.SignatureException;
 import java.util.Optional;
 
+/**
+ * {@link RestController} mit API zum Login-System
+ */
 @RestController()
 @RequestMapping("api/login")
 public class LoginController {
+    /**
+     * Instanz von {@link UserService}
+     */
     UserService userService;
+    /**
+     * Instanz von {@link Web3Service}
+     */
     Web3Service web3Service;
 
+    /**
+     * Konstruktor von {@link LoginController} mit Dependency Injection
+     * @param userService Instanz von {@link UserService}
+     * @param web3Service Instanz von {@link Web3Service}
+     */
     @Autowired
     public LoginController(UserService userService, Web3Service web3Service) {
         this.userService = userService;
         this.web3Service = web3Service;
     }
 
+    /**
+     * Erzeugt und holt die Nachricht zum Signieren in der {@link m.heim.server.domain.User} Datenbank
+     * @param publicAddress Public Address des Users
+     * @return Nachricht zum Signieren
+     */
     @GetMapping("getNonce")
     private ResponseEntity<String> getNonce(@RequestParam String publicAddress){
         publicAddress = publicAddress.toLowerCase();
@@ -41,6 +61,13 @@ public class LoginController {
         return new ResponseEntity<>(user.getNonce(), HttpStatus.OK);
     }
 
+    /**
+     * Erzeugt einen JSON Web Token für die Public Address eines Ethereum Wallets
+     * @param signedNonce Signierte Nachricht
+     * @param nonce Ursprüngliche Nachricht
+     * @return Modell eines JWT
+     * @throws SignatureException bei einer ungültigen Unterschrift
+     */
     @GetMapping("getToken")
     private ResponseEntity<String> getToken(@RequestParam String signedNonce, @RequestParam String nonce) throws SignatureException {
         String recoveredAddress = web3Service

@@ -9,16 +9,31 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+/**
+ * Benutzerdefinierte Implementation des {@link WebSecurityConfigurerAdapter} zur Verwendung des {@link JWTAuthenticationFilter}
+ */
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-    TokenService tokenService;
+    /**
+     * Instanz einer Implementation von {@link TokenService}
+     */
+    private final TokenService tokenService;
 
+    /**
+     * Konstruktor von {@link SecurityConfig} mit Dependency Injection
+     * @param tokenService Instanz einer Implementation von {@link TokenService}
+     */
     @Autowired
     public SecurityConfig(TokenService tokenService) {
         this.tokenService = tokenService;
     }
 
+    /**
+     * Konfiguration der {@link HttpSecurity}
+     * @param http Instanz der {@link HttpSecurity}
+     * @throws Exception
+     */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
