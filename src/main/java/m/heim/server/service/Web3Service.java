@@ -1,6 +1,5 @@
 package m.heim.server.service;
 
-import m.heim.server.config.SecurityConfig;
 import m.heim.server.domain.TokenModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -51,7 +50,7 @@ public class Web3Service {
      * @param signedMessage Signierte Nachricht
      * @param nonce Ursprüngliche Nachricht
      * @return Public Address eines Ethereum Wallets
-     * @throws SignatureException w
+     * @throws SignatureException Bei Ungültiger Signatur
      */
     public String recoverAddressFromSignature(String signedMessage, String nonce) throws SignatureException {
         String message = "\u0019Ethereum Signed Message:\n" + nonce.length() + nonce;

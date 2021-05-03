@@ -1,7 +1,6 @@
 package m.heim.server.controller;
 
 import m.heim.server.domain.User;
-import m.heim.server.service.GameService;
 import m.heim.server.service.UserService;
 import m.heim.server.service.Web3Service;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,11 +23,11 @@ public class LoginController {
     /**
      * Instanz von {@link UserService}
      */
-    UserService userService;
+    private final UserService userService;
     /**
      * Instanz von {@link Web3Service}
      */
-    Web3Service web3Service;
+    private final Web3Service web3Service;
 
     /**
      * Konstruktor von {@link LoginController} mit Dependency Injection
